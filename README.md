@@ -15,7 +15,7 @@
     assign them to the corresponding zone node
 
 IEntryNode: 
-- (XBase,YBase,XBound,YBound) registerZone(IZoneNode zoneNode)
+- (XBase,YBase,XBound,YBound,matrixSize) registerZone(IZoneNode zoneNode)
 - (IZoneNode,MESSAGE,bool) registerPlayer(IPlayer player,int X,int Y)
 
 IZoneNode:
@@ -33,7 +33,7 @@ IZoneNode:
 IPlayer:
 - string getId()
 
-- void updateMap(List<(playerId,int x,int y)> players,bool zoneChanged)
+- void updateMap(List<(strinng playerId,int x,int y)> players,bool zoneChanged)
 //notify players when another player disconnects or unregister
 - void removeAnotherPlayer(string playerId)
 - void sayHello(string playerId)
