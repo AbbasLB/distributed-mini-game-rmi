@@ -25,6 +25,7 @@ public class PlayerClient{
 	System.out.println();
 
 	do{
+        //TODO: fix userName to be unique(add random number)
 		System.out.print("Enter Your UserName: ");
 		String userName = sc.nextLine();
         System.out.print("Enter Your X Coordinate: ");
@@ -39,7 +40,7 @@ public class PlayerClient{
 			System.out.println(response.getMessage());
 	}while(!response.isSuccess());
 
-	curZone=response.getZone();
+	curZone=response.getZoneDescription().getZoneNode();
 	System.out.println();
 
 	while(true)
@@ -74,9 +75,9 @@ public class PlayerClient{
             break;
         response= curZone.movePlayer(player, dir);
         if(response.isSuccess())
-        {
-    
-        }
+            curZone=response.getZoneDescription().getZoneNode();
+        if(response.getMessage()!=null && !response.getMessage().isEmpty())
+            System.out.println(response.getMessage());
 	}
 	curZone.unRegisterPlayer(player);
 	System.out.println();
