@@ -5,9 +5,15 @@ public class EntryNodeServer {
  
     public static void  main(String [] args) {
         try {
-
-        // TODO: make params dynamic
-        EntryNode h = new EntryNode(20,2);
+        if(args.length!=2)
+        {
+            System.out.println("Usage: java EntryNodeServer matrixSize splitSize");
+	        return;
+        }
+        int matrixSize=Integer.parseInt(args[0]);
+        int splitSize=Integer.parseInt(args[1]);
+        
+        EntryNode h = new EntryNode(matrixSize,splitSize);
         IEntryNode h_stub = (IEntryNode) UnicastRemoteObject.exportObject(h, 0);
         // Register the remote object in RMI registry with a given identifier
         

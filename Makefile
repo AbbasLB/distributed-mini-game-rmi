@@ -7,7 +7,7 @@ start-rmi:
 	rmiregistry -J-Djava.class.path=classes &
 
 start-entry:
-	java -cp classes EntryNodeServer
+	java -cp classes EntryNodeServer 20 4
 
 start-zone:
 	java -cp classes ZoneNodeServer localhost
