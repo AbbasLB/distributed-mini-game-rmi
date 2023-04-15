@@ -120,6 +120,7 @@ public class EntryNode implements IEntryNode,Serializable {
     public ZoneResponse registerPlayer(IPlayer player, Coordinates playerCoordinates) throws RemoteException {
         if(!zonesReady)
             return new ZoneResponse("Game not ready.",false, null);
+        
         ZoneDescription zoneDesc=getZoneDescByCoord(playerCoordinates);
         return zoneDesc.getZoneNode().registerPlayer(player, playerCoordinates);
     }

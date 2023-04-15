@@ -1,6 +1,7 @@
 import java.io.Console;
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Random;
 import java.util.Scanner;
 
 public class PlayerClient{
@@ -24,10 +25,11 @@ public class PlayerClient{
 	System.out.println("Welcome to the game :)");
 	System.out.println();
 
+    Random rand = new Random();
+
 	do{
-        //TODO: fix userName to be unique(add random number)
 		System.out.print("Enter Your UserName: ");
-		String userName = sc.nextLine();
+		String userName = sc.nextLine()+"#"+rand.nextInt(1000);
         System.out.print("Enter Your X Coordinate: ");
         int xPos=sc.nextInt();
         System.out.print("Enter Your Y Coordinate: ");

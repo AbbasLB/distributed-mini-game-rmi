@@ -210,7 +210,6 @@ public class ZoneNode implements IZoneNode,Serializable {
                 broadcastPlayerCoords(playerId,destCoordinates);
                 sendHello(player,playerId,destCoordinates);
                 
-                //TODO: check hello order
                 return new ZoneResponse("Player moved to position ("+destCoordinates.getX()+","+destCoordinates.getY()+")", true, zoneDescription);
             }
             return new ZoneResponse("Coordinates occupied by another player", false, zoneDescription);

@@ -11,16 +11,6 @@ public class Player implements IPlayer, Serializable {
     {
         this.id=id;
     }
-
-    //TODO: Delete this
-    private void DrawMapOld(ZoneDescription zoneDescription)
-    {
-        System.out.println("Map:");
-        System.out.println("zoneDescription:"+zoneDescription.getMatrixSize()+" "+zoneDescription.getxBase()+" "+zoneDescription.getyBase());
-        for (HashMap.Entry<String, Coordinates> player : otherZonePlayers.entrySet())  {
-            System.out.println(player.getKey()+" ("+player.getValue().getX()+","+player.getValue().getY()+")");
-        }
-    }
  
     private String getIdFromCoords(Coordinates coordinates)
     {
