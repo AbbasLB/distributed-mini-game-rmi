@@ -31,27 +31,13 @@ public class Player implements IPlayer, Serializable {
         }
         return null;
     }
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
-
-    public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
-    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
-    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
-    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
-    public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
-    public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
-    public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
-    public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+    
 
     private void DrawMap(ZoneDescription zoneDescription)
     {
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();
+
         int matrixSize = zoneDescription.getMatrixSize();
         int xBound=zoneDescription.getxBound();
         int xBase=zoneDescription.getxBase();
@@ -61,21 +47,21 @@ public class Player implements IPlayer, Serializable {
         for(int i=0;i<matrixSize;i++){
             for(int j=0;j<matrixSize;j++)
             {
-                if(i>=xBase && i<xBound && j>=yBase && j<yBound)
+                if(i>=yBase && i<yBound && j>=xBase && j<xBound)
                 {
-                    String playerId= getIdFromCoords(new Coordinates(i, j));
+                    String playerId= getIdFromCoords(new Coordinates(j, i));
                     if(playerId==null)
                     {
-                        System.out.print(ANSI_CYAN_BACKGROUND+"  "+ANSI_RESET);
+                        System.out.print(TerminalColors.ANSI_CYAN_BACKGROUND+"   "+TerminalColors.ANSI_RESET);
                     }
                     else if(playerId.equals(id))
                     {
-                        System.out.print(ANSI_GREEN_BACKGROUND+"  "+ANSI_RESET);
+                        System.out.print(TerminalColors.ANSI_GREEN_BACKGROUND+" "+id.charAt(0)+" "+TerminalColors.ANSI_RESET);
                     }else {
-                        System.out.print(ANSI_RED_BACKGROUND+"  "+ANSI_RESET);
+                        System.out.print(TerminalColors.ANSI_RED_BACKGROUND+" "+playerId.charAt(0)+" "+TerminalColors.ANSI_RESET);
                     }
                 }else{
-                    System.out.print(ANSI_WHITE_BACKGROUND +"  "+ANSI_RESET);
+                    System.out.print(TerminalColors.ANSI_BLACK_BACKGROUND +"   "+TerminalColors.ANSI_RESET);
                 }
             }
             System.out.println();

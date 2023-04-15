@@ -150,13 +150,13 @@ public class ZoneNode implements IZoneNode,Serializable {
     {
         int x = coordinates.getX();
         int y = coordinates.getY();
-        if(direction==Direction.Left)
-            return new Coordinates(x, y-1);
-        if(direction==Direction.Right)
-            return new Coordinates(x, y+1);
         if(direction==Direction.Up)
-            return new Coordinates(x-1, y);
+            return new Coordinates(x, y-1);
         if(direction==Direction.Down)
+            return new Coordinates(x, y+1);
+        if(direction==Direction.Left)
+            return new Coordinates(x-1, y);
+        if(direction==Direction.Right)
             return new Coordinates(x+1, y);
         return coordinates;
     }
