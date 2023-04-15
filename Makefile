@@ -1,10 +1,11 @@
 all: 
-	javac *.java -d classes
+	javac -d classes *.java 
 
 start-rmi:
 	if pgrep rmiregistry; then pkill rmiregistry; fi
-	rmiregistry &
-	
+	sleep 1
+	rmiregistry -J-Djava.class.path=classes &
+
 start-entry:
 	java -cp classes EntryNodeServer
 

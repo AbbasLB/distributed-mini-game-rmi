@@ -23,6 +23,11 @@ public class ZoneNode implements IZoneNode,Serializable {
     {
         try{
             zoneDescription = entryNode.registerZone(exportedZoneNode);
+            if(zoneDescription==null)
+            {
+                System.err.println("Couldn't register zone since all zones registered.") ;
+                System.exit(1);
+            }
         }
         catch (Exception e){
             System.err.println("Failed To RegisterZone:" + e) ;
@@ -34,6 +39,11 @@ public class ZoneNode implements IZoneNode,Serializable {
     @Override
     public void linkNeighbors(ZoneNeighbors neighbors) throws RemoteException {
         zoneNeighbors = neighbors;
+        System.out.println("Top Neighbor = "+neighbors.getTopZone());
+        System.out.println("Bottom Neighbor = "+neighbors.getBottomZone());
+        System.out.println("Left Neighbor = "+neighbors.getLeftZone());
+        System.out.println("Right Neighbor = "+neighbors.getRightZone());
+        System.out.println("----------------");
     }
 
     @Override
@@ -159,7 +169,7 @@ public class ZoneNode implements IZoneNode,Serializable {
         int xBase=zoneDescription.getxBase();
         int yBase=zoneDescription.getyBase();
         int yBound=zoneDescription.getyBound();
-        
+        System.out.println("Coords("+x+","+y+") xBase="+xBase+" xBound="+xBound+" yBase="+yBase+" yBound="+yBound);
         if(x >= xBound)
             return zoneNeighbors.getRightZone();
         if(x < xBase)
@@ -181,7 +191,7 @@ public class ZoneNode implements IZoneNode,Serializable {
         } catch (RemoteException e) {
             return new ZoneResponse("Player Disconnected", false, zoneDescription);
         }
-        
+        System.out.println("Direction = "+direction);
         Coordinates coordinates =  playersToCoordinates.get(playerId);
         if(coordinates==null)
             return new ZoneResponse("Player is not registered.", false, zoneDescription);

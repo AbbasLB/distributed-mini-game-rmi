@@ -1,4 +1,6 @@
-public class ZoneResponse {
+import java.io.Serializable;
+
+public class ZoneResponse implements Serializable {
     private String message;
     private boolean success;
     private ZoneDescription zoneDescription;

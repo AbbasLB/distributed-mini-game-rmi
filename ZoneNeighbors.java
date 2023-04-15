@@ -1,4 +1,6 @@
-public class ZoneNeighbors {
+import java.io.Serializable;
+
+public class ZoneNeighbors implements Serializable{
 
     private IZoneNode leftZone;
     private IZoneNode rightZone;

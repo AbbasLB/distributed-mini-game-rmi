@@ -43,21 +43,21 @@ public class EntryNode implements IEntryNode,Serializable {
     {
         for(int i=0;i<splitSize;i++){
             for(int j=0;j<splitSize;j++){
-                ZoneDescription zoneDesc=zones[i][j];
-                ZoneDescription leftZoneDesc=null;
-                ZoneDescription rightZoneDesc=null;
-                ZoneDescription topZoneDesc=null;
-                ZoneDescription bottomZoneDesc=null;
+                IZoneNode zone=zones[i][j].getZoneNode();
+                IZoneNode leftZone=null;
+                IZoneNode rightZone=null;
+                IZoneNode topZone=null;
+                IZoneNode bottomZone=null;
                 if(j+1<splitSize)
-                    rightZoneDesc=zones[i][j+1];
+                    rightZone=zones[i][j+1].getZoneNode();
                 if(i+1<splitSize)
-                    bottomZoneDesc=zones[i+1][j];
+                    bottomZone=zones[i+1][j].getZoneNode();
                 if(i-1>=0)
-                    topZoneDesc=zones[i-1][j];
+                    topZone=zones[i-1][j].getZoneNode();
                 if(j-1>=0)
-                    leftZoneDesc=zones[i][j-1];
+                    leftZone=zones[i][j-1].getZoneNode();
                 try{
-                    zoneDesc.getZoneNode().linkNeighbors(new ZoneNeighbors(leftZoneDesc.getZoneNode(), rightZoneDesc.getZoneNode(), topZoneDesc.getZoneNode(), bottomZoneDesc.getZoneNode()));
+                    zone.linkNeighbors(new ZoneNeighbors(leftZone, rightZone, topZone, bottomZone));
                 }
                 catch(Exception e)
                 {
@@ -80,8 +80,7 @@ public class EntryNode implements IEntryNode,Serializable {
                     System.exit(1);
                 }
             }
-                
-
+        zonesReady=true;
     }
     @Override
     public ZoneDescription registerZone(IZoneNode zoneNode) throws RemoteException {
@@ -95,10 +94,12 @@ public class EntryNode implements IEntryNode,Serializable {
                     //maybe we should move it to another function after return
                     if(nodesRegistered==splitSize*splitSize)
                         LinkNeighbors();
+                    System.out.println("New Zone Registered");
                     return zoneDesc;
                 }
             }
         }
+        System.out.println("Max Zones Registered, couldn't register new zone");
         return null;
     }
 

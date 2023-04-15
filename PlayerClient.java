@@ -32,6 +32,7 @@ public class PlayerClient{
         int xPos=sc.nextInt();
         System.out.print("Enter Your Y Coordinate: ");
         int yPos=sc.nextInt();
+        sc.nextLine();
 
 		Player playerImpl =new Player(userName);
 		player = (IPlayer) UnicastRemoteObject.exportObject(playerImpl, 0);
@@ -55,13 +56,13 @@ public class PlayerClient{
                 dir=Direction.Left;
                 break;
             case "R":
-                dir=Direction.Left;
+                dir=Direction.Right;
             break;
             case "U":
-                dir=Direction.Left;
+                dir=Direction.Up;
             break;
             case "D":
-                dir=Direction.Left;
+                dir=Direction.Down;
             break;
             case "Q":
             quit=true;
