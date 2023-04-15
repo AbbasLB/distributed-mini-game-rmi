@@ -1,4 +1,6 @@
-public class ZoneDescription {
+import java.io.Serializable;
+
+public class ZoneDescription implements Serializable {
     private IZoneNode zoneNode;
     private int xBase;
     private int yBase;

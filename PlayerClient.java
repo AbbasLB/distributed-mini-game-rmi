@@ -79,7 +79,7 @@ public class PlayerClient{
         if(response.getMessage()!=null && !response.getMessage().isEmpty())
             System.out.println(response.getMessage());
 	}
-	curZone.unRegisterPlayer(player);
+	curZone.unRegisterPlayer(player.getId());
 	System.out.println();
 	System.out.println("Bye Bye :)");
 	sc.close();

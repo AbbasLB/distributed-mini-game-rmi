@@ -32,16 +32,21 @@ public class Player implements IPlayer, Serializable {
         if(zoneChanged)
             otherZonePlayers.clear();
         for (HashMap.Entry<String, Coordinates> player : players.entrySet()) {
-            otherZonePlayers.put(player.getKey(), player.getValue());
+            //if coords are null, we remove player
+            if(player.getValue()==null)
+            {
+                if(otherZonePlayers.containsKey(player.getKey()))
+                    otherZonePlayers.remove(player.getKey());
+            }
+            else{
+                otherZonePlayers.put(player.getKey(), player.getValue());
+            }
         }
         DrawMap(zoneDescription);
     }
 
-    @Override
-    public void removeAnotherPlayer(String playerId) {
-        if(otherZonePlayers.containsKey(playerId))
-            otherZonePlayers.remove(playerId);
-    }
+   
+            
 
     @Override
     public void receiveMessage(String message) {
