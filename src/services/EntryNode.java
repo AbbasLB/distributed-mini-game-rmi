@@ -1,14 +1,10 @@
 package services;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
-import interfaces.IEntryNode;
-import interfaces.IPlayer;
-import interfaces.IZoneNode;
-import models.Coordinates;
-import models.ZoneDescription;
-import models.ZoneNeighbors;
-import models.ZoneResponse;
+import interfaces.*;
+import models.*;
 
 public class EntryNode implements IEntryNode,Serializable {
 
@@ -26,7 +22,6 @@ public class EntryNode implements IEntryNode,Serializable {
         zonesReady=false;
         initZonesMatrix();
     }
-
     private void initZonesMatrix()
     {
         if(splitSize>matrixSize)
