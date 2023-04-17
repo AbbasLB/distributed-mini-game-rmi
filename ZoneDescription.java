@@ -1,14 +1,14 @@
 import java.io.Serializable;
 
-public class ZoneDescription implements Serializable {
-    private IZoneNode zoneNode;
+public class ZoneDescription<T> implements Serializable {
+    private T zoneNode;
     private int xBase;
     private int yBase;
     private int xBound;
     private int yBound;
     private int matrixSize;
     
-    public ZoneDescription(IZoneNode zoneNode, int xBase, int yBase, int xBound, int yBound, int matrixSize) {
+    public ZoneDescription(T zoneNode, int xBase, int yBase, int xBound, int yBound, int matrixSize) {
         this.zoneNode = zoneNode;
         this.xBase = xBase;
         this.yBase = yBase;
@@ -31,11 +31,11 @@ public class ZoneDescription implements Serializable {
     public int getMatrixSize() {
         return matrixSize;
     }
-    public IZoneNode getZoneNode() {
+    public T getZoneNode() {
         return zoneNode;
     }
 
-    public void setZoneNode(IZoneNode zoneNode) {
+    public void setZoneNode(T zoneNode) {
         this.zoneNode = zoneNode;
     }
     public void setxBase(int xBase) {

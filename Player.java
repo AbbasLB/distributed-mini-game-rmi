@@ -1,6 +1,5 @@
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 
 public class Player implements IPlayer, Serializable {
 
@@ -23,7 +22,7 @@ public class Player implements IPlayer, Serializable {
     }
     
 
-    private void DrawMap(ZoneDescription zoneDescription)
+    private void DrawMap(ZoneDescription<IZoneNodePlayer> zoneDescription)
     {
         System.out.print("\033[H\033[2J");  
         System.out.flush();
@@ -66,7 +65,7 @@ public class Player implements IPlayer, Serializable {
     }
 
     @Override
-    public void updateMap(HashMap<String,Coordinates>  players, boolean zoneChanged,ZoneDescription zoneDescription) {
+    public void updateMap(HashMap<String,Coordinates>  players, boolean zoneChanged,ZoneDescription<IZoneNodePlayer> zoneDescription) {
         if(zoneChanged)
             otherZonePlayers.clear();
         for (HashMap.Entry<String, Coordinates> player : players.entrySet()) {

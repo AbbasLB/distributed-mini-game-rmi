@@ -3,9 +3,9 @@ import java.io.Serializable;
 public class ZoneResponse implements Serializable {
     private String message;
     private boolean success;
-    private ZoneDescription zoneDescription;
+    private ZoneDescription<IZoneNodePlayer> zoneDescription;
 
-    public ZoneResponse(String message, boolean success,ZoneDescription zoneDescription) {
+    public ZoneResponse(String message, boolean success,ZoneDescription<IZoneNodePlayer> zoneDescription) {
         this.message = message;
         this.success = success;
         this.zoneDescription = zoneDescription;
@@ -19,7 +19,7 @@ public class ZoneResponse implements Serializable {
         return success;
     }
 
-    public ZoneDescription getZoneDescription() {
+    public ZoneDescription<IZoneNodePlayer> getZoneDescription() {
         return zoneDescription;
     }
     

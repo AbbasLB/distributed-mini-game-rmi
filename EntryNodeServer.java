@@ -18,6 +18,7 @@ public class EntryNodeServer {
         // Register the remote object in RMI registry with a given identifier
         
         Registry registry= LocateRegistry.getRegistry(); 
+        registry.bind("GameSetupService", h_stub);
         registry.bind("GameEntryService", h_stub);
         System.out.println ("Entry Node ready...");
 

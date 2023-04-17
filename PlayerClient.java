@@ -1,4 +1,3 @@
-import java.io.Console;
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Random;
@@ -16,12 +15,12 @@ public class PlayerClient{
 
 	// Get remote object reference
 	Registry registry = LocateRegistry.getRegistry(host); 
-	IEntryNode gameEntryNode = (IEntryNode) registry.lookup("GameEntryService");
+	IEntryNodePlayer gameEntryNode = (IEntryNodePlayer) registry.lookup("GameEntryService");
 
 	Scanner sc = new Scanner(System.in);
 	IPlayer player;
 	ZoneResponse response;
-    IZoneNode curZone;
+    IZoneNodePlayer curZone;
 	System.out.println("Welcome to the game :)");
 	System.out.println();
 

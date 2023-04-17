@@ -6,7 +6,7 @@ public class EntryNode implements IEntryNode,Serializable {
     private boolean zonesReady;
     private int matrixSize;
     private int splitSize;
-    private ZoneDescription[][] zones;
+    private ZoneDescription<IZoneNode>[][] zones;
     private int nodesRegistered;
 
     public EntryNode(int matrixSize,int splitSize)
@@ -28,7 +28,7 @@ public class EntryNode implements IEntryNode,Serializable {
             xBase=0;
             for(int j=0;j<splitSize;j++)
             {
-                zones[i][j]=new ZoneDescription(null, xBase,yBase, xBase+singleNodeDim, yBase+singleNodeDim, matrixSize);
+                zones[i][j]=new ZoneDescription<IZoneNode>(null, xBase,yBase, xBase+singleNodeDim, yBase+singleNodeDim, matrixSize);
                 xBase += singleNodeDim;
                 if(j==splitSize-1)
                     zones[i][j].setxBound(matrixSize);
@@ -83,11 +83,11 @@ public class EntryNode implements IEntryNode,Serializable {
         zonesReady=true;
     }
     @Override
-    public ZoneDescription registerZone(IZoneNode zoneNode) throws RemoteException {
+    public ZoneDescription<IZoneNode> registerZone(IZoneNode zoneNode) throws RemoteException {
 
         for(int i=0;i<splitSize;i++){
             for(int j=0;j<splitSize;j++){
-                ZoneDescription zoneDesc=zones[i][j];
+                ZoneDescription<IZoneNode> zoneDesc=zones[i][j];
                 if(zoneDesc.getZoneNode()==null){
                     zoneDesc.setZoneNode(zoneNode);
                     nodesRegistered++;
@@ -103,11 +103,11 @@ public class EntryNode implements IEntryNode,Serializable {
         return null;
     }
 
-    private ZoneDescription getZoneDescByCoord(Coordinates playerCoordinates)
+    private ZoneDescription<IZoneNode> getZoneDescByCoord(Coordinates playerCoordinates)
     {
         for(int i=0;i<splitSize;i++){
             for(int j=0;j<splitSize;j++){
-                ZoneDescription zoneDesc=zones[i][j];
+                ZoneDescription<IZoneNode> zoneDesc=zones[i][j];
                 if(playerCoordinates.getX() >= zoneDesc.getxBase() && playerCoordinates.getX() < zoneDesc.getxBound()
                 && playerCoordinates.getY() >= zoneDesc.getyBase() && playerCoordinates.getY() < zoneDesc.getyBound())
                     return zoneDesc;   
@@ -121,7 +121,9 @@ public class EntryNode implements IEntryNode,Serializable {
         if(!zonesReady)
             return new ZoneResponse("Game not ready.",false, null);
         
-        ZoneDescription zoneDesc=getZoneDescByCoord(playerCoordinates);
+        ZoneDescription<IZoneNode> zoneDesc=getZoneDescByCoord(playerCoordinates);
+        if(zoneDesc==null)
+            return new ZoneResponse("Coordinates out of bounds.",false, null);
         return zoneDesc.getZoneNode().registerPlayer(player, playerCoordinates);
     }
     
