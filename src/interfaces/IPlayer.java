@@ -1,4 +1,8 @@
+package interfaces;
 import java.util.HashMap;
+
+import models.*;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

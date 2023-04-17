@@ -1,5 +1,10 @@
+package interfaces;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+
+import models.Coordinates;
+import models.Direction;
+import models.ZoneResponse;
 
 public interface IZoneNodePlayer  extends Remote{
     public ZoneResponse registerPlayer(IPlayer player,Coordinates playerCoordinates) throws RemoteException;

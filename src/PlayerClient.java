@@ -3,6 +3,14 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Random;
 import java.util.Scanner;
 
+import interfaces.IEntryNodePlayer;
+import interfaces.IPlayer;
+import interfaces.IZoneNodePlayer;
+import models.Coordinates;
+import models.Direction;
+import models.ZoneResponse;
+import services.Player;
+
 public class PlayerClient{
   public static void main(String [] args) {
 	

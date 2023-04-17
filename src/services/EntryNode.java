@@ -1,5 +1,14 @@
+package services;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+
+import interfaces.IEntryNode;
+import interfaces.IPlayer;
+import interfaces.IZoneNode;
+import models.Coordinates;
+import models.ZoneDescription;
+import models.ZoneNeighbors;
+import models.ZoneResponse;
 
 public class EntryNode implements IEntryNode,Serializable {
 

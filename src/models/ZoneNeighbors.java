@@ -1,4 +1,7 @@
+package models;
 import java.io.Serializable;
+
+import interfaces.IZoneNode;
 
 public class ZoneNeighbors implements Serializable{
 

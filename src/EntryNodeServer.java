@@ -1,4 +1,8 @@
-import java.rmi.server.*; 
+import java.rmi.server.*;
+
+import interfaces.IEntryNode;
+import services.EntryNode;
+
 import java.rmi.registry.*;
 
 public class EntryNodeServer {

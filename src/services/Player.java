@@ -1,5 +1,12 @@
+package services;
 import java.io.Serializable;
 import java.util.HashMap;
+
+import interfaces.IPlayer;
+import interfaces.IZoneNodePlayer;
+import models.Coordinates;
+import models.TerminalColors;
+import models.ZoneDescription;
 
 public class Player implements IPlayer, Serializable {
 

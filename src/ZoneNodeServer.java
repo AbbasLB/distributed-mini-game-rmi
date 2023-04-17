@@ -1,6 +1,10 @@
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
 
+import interfaces.IEntryNode;
+import interfaces.IZoneNode;
+import services.ZoneNode;
+
 public class ZoneNodeServer {
     public static void main(String [] args) {
 	

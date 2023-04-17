@@ -1,4 +1,7 @@
+package models;
 import java.io.Serializable;
+
+import interfaces.IZoneNodePlayer;
 
 public class ZoneResponse implements Serializable {
     private String message;
