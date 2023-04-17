@@ -55,7 +55,7 @@ public class PlayerClient{
 
 	while(true)
 	{
-		System.out.print("Move Direction(L,R,U,D) (Q Quit):");
+		//System.out.print("Move Direction(L,R,U,D) (Q Quit):");
         String input=sc.nextLine();
         Direction dir=Direction.Left;
         boolean quit=false;
@@ -77,7 +77,8 @@ public class PlayerClient{
             quit=true;
             break;
             default:
-            System.out.print("Invalid Command");
+            player.receiveMessage("Invalid Command");
+            //System.out.print();
                 continue;
 
         }
@@ -87,7 +88,8 @@ public class PlayerClient{
         if(response.isSuccess())
             curZone=response.getZoneDescription().getZoneNode();
         if(response.getMessage()!=null && !response.getMessage().isEmpty())
-            System.out.println(response.getMessage());
+            player.receiveMessage(response.getMessage());
+        //System.out.println(response.getMessage());
 	}
 	curZone.unRegisterPlayer(player.getId());
 	System.out.println();

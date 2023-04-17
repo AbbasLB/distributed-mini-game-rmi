@@ -88,24 +88,28 @@ public class EntryNode implements IEntryNode,Serializable {
     }
     @Override
     public ZoneDescription<IZoneNode> registerZone(IZoneNode zoneNode) throws RemoteException {
-
-        for(int i=0;i<splitSize;i++){
-            for(int j=0;j<splitSize;j++){
-                ZoneDescription<IZoneNode> zoneDesc=zones[i][j];
-                if(zoneDesc.getZoneNode()==null){
-                    zoneDesc.setZoneNode(zoneNode);
-                    nodesRegistered++;
-                    //maybe we should move it to another function after return
-                    if(nodesRegistered==splitSize*splitSize)
-                        LinkNeighbors();
-                    System.out.println("New Zone Registered");
-                    return zoneDesc;
+        //only one zone can register at a time
+        synchronized(this)
+        {
+            for(int i=0;i<splitSize;i++){
+                for(int j=0;j<splitSize;j++){
+                    ZoneDescription<IZoneNode> zoneDesc=zones[i][j];
+                    if(zoneDesc.getZoneNode()==null){
+                        zoneDesc.setZoneNode(zoneNode);
+                        nodesRegistered++;
+                        //maybe we should move it to another function after return
+                        if(nodesRegistered==splitSize*splitSize)
+                            LinkNeighbors();
+                        System.out.println("New Zone Registered");
+                        return zoneDesc;
+                    }
                 }
             }
+            System.out.println("Max Zones Registered, couldn't register new zone");
+            return null;
         }
-        System.out.println("Max Zones Registered, couldn't register new zone");
-        return null;
     }
+        
 
     private ZoneDescription<IZoneNode> getZoneDescByCoord(Coordinates playerCoordinates)
     {

@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,8 +16,9 @@ public class ZoneNode implements IZoneNode,Serializable {
     private boolean zoneReady;
     private ZoneNeighbors zoneNeighbors;
 
-    private ConcurrentHashMap<String,Coordinates> playersToCoordinates = new ConcurrentHashMap<String,Coordinates>();
-    private ConcurrentHashMap<Coordinates,SimpleEntry<IPlayer,String>> coordinatesToPlayer = new ConcurrentHashMap<Coordinates,SimpleEntry<IPlayer,String>>();
+    private final Object playersLock = new Object();
+    private Map<String,Coordinates> playersToCoordinates = new HashMap<String,Coordinates>();
+    private Map<Coordinates,SimpleEntry<IPlayer,String>> coordinatesToPlayer = new HashMap<Coordinates,SimpleEntry<IPlayer,String>>();
 
     public ZoneNode()
     {
@@ -115,39 +117,45 @@ public class ZoneNode implements IZoneNode,Serializable {
     //TODO: Add synchronization
     @Override
     public ZoneResponse registerPlayer(IPlayer player, Coordinates playerCoordinates) throws RemoteException {
-        if(!zoneReady)
+        synchronized(playersLock)
+        {
+            if(!zoneReady)
             return new ZoneResponse("Zone not ready yet", false, getPlayerZoneDesc());
 
-        String playerId = player.getId();
-        try {
-            playerId = player.getId();
-        } catch (RemoteException e) {
-            return new ZoneResponse("Player Disconnected", false, getPlayerZoneDesc());
-        }
-        
-        if(playersToCoordinates.containsKey(playerId))
-            return new ZoneResponse("Player already registered with that username.", false, getPlayerZoneDesc());
-        if(coordinatesToPlayer.putIfAbsent(playerCoordinates,new SimpleEntry<IPlayer,String>(player,playerId))==null){
-            playersToCoordinates.putIfAbsent(playerId, playerCoordinates);
+            String playerId = player.getId();
+            try {
+                playerId = player.getId();
+            } catch (RemoteException e) {
+                return new ZoneResponse("Player Disconnected", false, getPlayerZoneDesc());
+            }
             
-            broadcastPlayerCoords(playerId,playerCoordinates);
-            sendAllPlayersCoords(player);
-            sendHello(player,playerId,playerCoordinates);
-            
-            //TODO: check hello order
-            return new ZoneResponse("Player registered to zone at position ("+playerCoordinates.getX()+","+playerCoordinates.getY()+")", true, getPlayerZoneDesc());
+            if(playersToCoordinates.containsKey(playerId))
+                return new ZoneResponse("Player already registered with that username.", false, getPlayerZoneDesc());
+            if(coordinatesToPlayer.putIfAbsent(playerCoordinates,new SimpleEntry<IPlayer,String>(player,playerId))==null){
+                playersToCoordinates.putIfAbsent(playerId, playerCoordinates);
+                
+                broadcastPlayerCoords(playerId,playerCoordinates);
+                sendAllPlayersCoords(player);
+                sendHello(player,playerId,playerCoordinates);
+                
+                //TODO: check hello order
+                return new ZoneResponse("Player registered to zone at position ("+playerCoordinates.getX()+","+playerCoordinates.getY()+")", true, getPlayerZoneDesc());
+            }
+            return new ZoneResponse("Coordinates occupied by another player", false, getPlayerZoneDesc());
         }
-        return new ZoneResponse("Coordinates occupied by another player", false, getPlayerZoneDesc());
-        
     }
 
     private void unRegisterPlayerInternal(String playerId)
     {
-        Coordinates coordinates=  playersToCoordinates.remove(playerId);
-        if(coordinates!=null){
-            coordinatesToPlayer.remove(coordinates);
-            broadcastPlayerCoords(playerId, null);
+        synchronized(playersLock)
+        {
+            Coordinates coordinates=  playersToCoordinates.remove(playerId);
+            if(coordinates!=null){
+                coordinatesToPlayer.remove(coordinates);
+                broadcastPlayerCoords(playerId, null);
+            }
         }
+        
     }
 
     @Override
@@ -194,41 +202,45 @@ public class ZoneNode implements IZoneNode,Serializable {
     @Override
     public ZoneResponse movePlayer(IPlayer player, Direction direction) throws RemoteException {
 
-        String playerId = player.getId();
-        try {
-            playerId = player.getId();
-        } catch (RemoteException e) {
-            return new ZoneResponse("Player Disconnected", false, getPlayerZoneDesc());
-        }
-        System.out.println("Direction = "+direction);
-        Coordinates coordinates =  playersToCoordinates.get(playerId);
-        if(coordinates==null)
-            return new ZoneResponse("Player is not registered.", false, getPlayerZoneDesc());
-        Coordinates destCoordinates=destCoords(coordinates, direction);
-        IZoneNode destZone= getZoneByCoords(destCoordinates);
-        if(destZone==null)
+        synchronized(playersLock)
         {
-            return new ZoneResponse("Coordinates out of bounds", false, getPlayerZoneDesc());
-        }
-        else if(destZone==this)
-        {
-            if(coordinatesToPlayer.putIfAbsent(destCoordinates,new SimpleEntry<IPlayer,String>(player,playerId))==null){
-                playersToCoordinates.put(playerId, destCoordinates);
-                coordinatesToPlayer.remove(coordinates);
-                
-                broadcastPlayerCoords(playerId,destCoordinates);
-                sendHello(player,playerId,destCoordinates);
-                
-                return new ZoneResponse("Player moved to position ("+destCoordinates.getX()+","+destCoordinates.getY()+")", true, getPlayerZoneDesc());
+            String playerId = player.getId();
+            try {
+                playerId = player.getId();
+            } catch (RemoteException e) {
+                return new ZoneResponse("Player Disconnected", false, getPlayerZoneDesc());
             }
-            return new ZoneResponse("Coordinates occupied by another player", false, getPlayerZoneDesc());
+            System.out.println("Direction = "+direction);
+            Coordinates coordinates =  playersToCoordinates.get(playerId);
+            if(coordinates==null)
+                return new ZoneResponse("Player is not registered.", false, getPlayerZoneDesc());
+            Coordinates destCoordinates=destCoords(coordinates, direction);
+            IZoneNode destZone= getZoneByCoords(destCoordinates);
+            if(destZone==null)
+            {
+                return new ZoneResponse("Coordinates out of bounds", false, getPlayerZoneDesc());
+            }
+            else if(destZone==this)
+            {
+                if(coordinatesToPlayer.putIfAbsent(destCoordinates,new SimpleEntry<IPlayer,String>(player,playerId))==null){
+                    playersToCoordinates.put(playerId, destCoordinates);
+                    coordinatesToPlayer.remove(coordinates);
+                    
+                    broadcastPlayerCoords(playerId,destCoordinates);
+                    sendHello(player,playerId,destCoordinates);
+                    
+                    return new ZoneResponse("", true, getPlayerZoneDesc());
+                }
+                return new ZoneResponse("Coordinates occupied by another player", false, getPlayerZoneDesc());
+            }
+            else{
+                ZoneResponse destZoneResponse = destZone.registerPlayer(player, destCoordinates);
+                if(destZoneResponse.isSuccess())
+                    unRegisterPlayerInternal(playerId);
+                return destZoneResponse;
+            }
         }
-        else{
-            ZoneResponse destZoneResponse = destZone.registerPlayer(player, destCoordinates);
-            if(destZoneResponse.isSuccess())
-                unRegisterPlayerInternal(playerId);
-            return destZoneResponse;
-        }
+        
     }
 
     

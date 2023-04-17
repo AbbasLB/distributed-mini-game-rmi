@@ -21,4 +21,5 @@ done
 sleep 2
 gnome-terminal --title="Player 1" -- bash -c "java -jar dist/PlayerClient.jar localhost; exec bash"
 gnome-terminal --title="Player 2" -- bash -c "java -jar dist/PlayerClient.jar localhost; exec bash"
+gnome-terminal --title="Player 3" -- bash -c "java -jar dist/PlayerClient.jar localhost; exec bash"
 
