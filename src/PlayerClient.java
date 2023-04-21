@@ -50,7 +50,7 @@ public class PlayerClient{
 			System.out.println(response.getMessage());
 	}while(!response.isSuccess());
 
-	curZone=response.getZoneDescription().getZoneNode();
+	curZone=response.getZoneNode();
 	System.out.println();
 
 	while(true)
@@ -86,7 +86,7 @@ public class PlayerClient{
             break;
         response= curZone.movePlayer(player, dir);
         if(response.isSuccess())
-            curZone=response.getZoneDescription().getZoneNode();
+            curZone=response.getZoneNode();
         if(response.getMessage()!=null && !response.getMessage().isEmpty())
             player.receiveMessage(response.getMessage());
         //System.out.println(response.getMessage());

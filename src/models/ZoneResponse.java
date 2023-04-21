@@ -6,12 +6,12 @@ import interfaces.IZoneNodePlayer;
 public class ZoneResponse implements Serializable {
     private String message;
     private boolean success;
-    private ZoneDescription<IZoneNodePlayer> zoneDescription;
+    private IZoneNodePlayer zoneNode;
 
-    public ZoneResponse(String message, boolean success,ZoneDescription<IZoneNodePlayer> zoneDescription) {
+    public ZoneResponse(String message, boolean success,IZoneNodePlayer zoneNode) {
         this.message = message;
         this.success = success;
-        this.zoneDescription = zoneDescription;
+        this.zoneNode = zoneNode;
     }
 
     public String getMessage() {
@@ -22,8 +22,8 @@ public class ZoneResponse implements Serializable {
         return success;
     }
 
-    public ZoneDescription<IZoneNodePlayer> getZoneDescription() {
-        return zoneDescription;
+    public IZoneNodePlayer getZoneNode() {
+        return zoneNode;
     }
     
 }
