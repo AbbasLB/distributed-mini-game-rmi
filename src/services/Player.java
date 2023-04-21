@@ -1,5 +1,6 @@
 package services;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -93,6 +94,10 @@ public class Player implements IPlayer, Serializable {
     public String getId() {
         return id;
     }
+    @Override
+    public void setId(String id) throws RemoteException {
+        this.id=id;
+    }
 
     @Override
     public void receiveUpdate(HashMap<String,Coordinates>  players, boolean zoneChanged,ZoneDescription<IZoneNodePlayer> zoneDescription) {
@@ -134,5 +139,7 @@ public class Player implements IPlayer, Serializable {
         //System.out.println(message);
         //id + ": Hello " + playerId ;
     }
+
+    
     
 }

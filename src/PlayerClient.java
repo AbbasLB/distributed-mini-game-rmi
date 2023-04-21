@@ -32,11 +32,10 @@ public class PlayerClient{
 	System.out.println("Welcome to the game :)");
 	System.out.println();
 
-    Random rand = new Random();
 
 	do{
 		System.out.print("Enter Your UserName: ");
-		String userName = sc.nextLine()+"#"+rand.nextInt(1000);
+		String userName = sc.nextLine();
         System.out.print("Enter Your X Coordinate: ");
         int xPos=sc.nextInt();
         System.out.print("Enter Your Y Coordinate: ");

@@ -13,6 +13,8 @@ public class EntryNode implements IEntryNode,Serializable {
     private int splitSize;
     private ZoneDescription<IZoneNode>[][] zones;
     private int nodesRegistered;
+    private int internalPlayerID = 1;
+    private final Object internalPlayerIDLock = new Object();
 
     public EntryNode(int matrixSize,int splitSize)
     {
@@ -132,6 +134,12 @@ public class EntryNode implements IEntryNode,Serializable {
         ZoneDescription<IZoneNode> zoneDesc=getZoneDescByCoord(playerCoordinates);
         if(zoneDesc==null)
             return new ZoneResponse("Coordinates out of bounds.",false, null);
+        
+        player.setId(player.getId()+"#"+internalPlayerID);
+        synchronized(internalPlayerIDLock)
+        {
+            internalPlayerID++;
+        }
         return zoneDesc.getZoneNode().registerPlayer(player, playerCoordinates);
     }
     
