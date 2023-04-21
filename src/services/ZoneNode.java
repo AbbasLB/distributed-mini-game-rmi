@@ -102,7 +102,7 @@ public class ZoneNode implements IZoneNode,Serializable {
         newPlayerMap.put(playerId, playerCoordinates);
         for (ConcurrentHashMap.Entry<Coordinates, SimpleEntry<IPlayer,String>> player : coordinatesToPlayer.entrySet()) {
             try {
-                player.getValue().getKey().receiveUpdate(newPlayerMap, false, getPlayerZoneDesc());
+                player.getValue().getKey().receiveUpdate(newPlayerMap, false, null);
             } catch (RemoteException e) {
                 unRegisterPlayerInternal(player.getValue().getValue());
             }

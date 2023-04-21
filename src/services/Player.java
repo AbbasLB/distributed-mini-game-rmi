@@ -102,9 +102,12 @@ public class Player implements IPlayer, Serializable {
     public void receiveUpdate(HashMap<String,Coordinates>  players, boolean zoneChanged,ZoneDescription<IZoneNodePlayer> zoneDescription) {
         synchronized(playersLock)
         {
-            this.zoneDescription=zoneDescription;
-            if(zoneChanged)
+            
+            if(zoneChanged){
+                this.zoneDescription=zoneDescription;
                 otherZonePlayers.clear();
+            }
+                
             for (HashMap.Entry<String, Coordinates> player : players.entrySet()) {
                 //if coords are null, we remove player
                 if(player.getValue()==null)
