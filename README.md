@@ -14,29 +14,27 @@
 3. Starting Phase: Once all nodes are linked together, the entry will start accepting new players and it will 
     assign them to the corresponding zone node
 
-IEntryNode: 
+
+IEntryNodePlayer:
+- (IZoneNodePlayer,String Message,bool success) registerPlayer(IPlayer player,PlayerCoordinates coords)
+
+IEntryNode exteds IEntryNodePlayer: 
 - (XBase,YBase,XBound,YBound,matrixSize) registerZone(IZoneNode zoneNode)
-- (IZoneNode,MESSAGE,bool) registerPlayer(IPlayer player,int X,int Y)
 
 IZoneNode:
-- void linkNeighbors(IZoneNode left,IZoneNode top,IZoneNode right,IZoneNode bottom)
-//register player in zone, send update to all other players, and give the player coordinates of the other players
-// check if say hello
-- (MESSAGE,bool) registerPlayer(IPlayer player,int X,int Y)
+    void linkNeighbors(ZoneNeighbors neighbors); ZoneNeigbors <=> class (leftNeighbor,rightNeighbor,topNeighbor,bottomNeigbor);
+    void MarkAsReady();
 
-//send position change to other players
-- void unRegisterPlayer(IPlayer player)
-
-//should call updateMap on all players including sender and sends hello to neighboring players(4 neighbors)
-- (IZoneNode,MESSAGE,bool) movePlayer(IPlayer player,Direction direction) 
+IZoneNodePlayer:
+    (IZoneNodePlayer,String Message,bool success) registerPlayer(IPlayer player,Coordinates playerCoordinates) ;
+    void unRegisterPlayer(String playerId);
+    (IZoneNodePlayer,String Message,bool success) movePlayer(IPlayer player,Direction direction) ;
 
 IPlayer:
 - string getId()
-
-- void updateMap(List<(strinng playerId,int x,int y)> players,bool zoneChanged)
-//notify players when another player disconnects or unregister
-- void removeAnotherPlayer(string playerId)
-- void sayHello(string playerId)
+- void setId(string id)
+- void receiveUpdate(List<(strinng playerId,int x,int y)> players,bool zoneChanged)
+- void receiveMessage(String message)
 
 
 - handled player disconnection
