@@ -5,9 +5,6 @@
 
 	<property name="projectName" value="GameDist" />
 	
-	<property name="matrixSize" value="20" />
-	<property name="splitSize" value="2" />
-	<property name="server" value="localhost" />
 
 	<!-- Java sources -->
 	<property name="src.dir" location="src" />

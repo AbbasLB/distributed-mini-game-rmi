@@ -1,6 +1,6 @@
 package services;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -17,8 +17,11 @@ public class Player implements IPlayer, Serializable {
     private final Object playersLock = new Object();
 
     private static final int MESSAGES_TO_SHOW = 3;
-    private HashMap<String,Coordinates> otherZonePlayers = new HashMap<String,Coordinates>();
+    private int messagesCount =0;
     private LinkedList<String> messages=new LinkedList<>();
+
+    private HashMap<String,Coordinates> otherZonePlayers = new HashMap<String,Coordinates>();
+
     ZoneDescription<IZoneNodePlayer> zoneDescription;
     private String id;
 
@@ -90,14 +93,21 @@ public class Player implements IPlayer, Serializable {
     public String getId() {
         return id;
     }
+    @Override
+    public void setId(String id) throws RemoteException {
+        this.id=id;
+    }
 
     @Override
-    public void updateMap(HashMap<String,Coordinates>  players, boolean zoneChanged,ZoneDescription<IZoneNodePlayer> zoneDescription) {
+    public void receiveUpdate(HashMap<String,Coordinates>  players, boolean zoneChanged,ZoneDescription<IZoneNodePlayer> zoneDescription) {
         synchronized(playersLock)
         {
-            this.zoneDescription=zoneDescription;
-            if(zoneChanged)
+            
+            if(zoneChanged){
+                this.zoneDescription=zoneDescription;
                 otherZonePlayers.clear();
+            }
+                
             for (HashMap.Entry<String, Coordinates> player : players.entrySet()) {
                 //if coords are null, we remove player
                 if(player.getValue()==null)
@@ -110,6 +120,8 @@ public class Player implements IPlayer, Serializable {
                 }
             }
         }
+
+        //redraw UI
         DrawUI();
         
     }
@@ -123,12 +135,15 @@ public class Player implements IPlayer, Serializable {
         {
             if(messages.size()==MESSAGES_TO_SHOW)
                 messages.removeFirst();
-            messages.addLast(message);
+            messagesCount++;
+            messages.addLast("["+messagesCount+"]: "+message);
         }
         
         DrawUI();
         //System.out.println(message);
         //id + ": Hello " + playerId ;
     }
+
+    
     
 }

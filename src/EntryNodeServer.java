@@ -19,11 +19,15 @@ public class EntryNodeServer {
         
         EntryNode h = new EntryNode(matrixSize,splitSize);
         IEntryNode h_stub = (IEntryNode) UnicastRemoteObject.exportObject(h, 0);
-        // Register the remote object in RMI registry with a given identifier
+        
         
         Registry registry= LocateRegistry.getRegistry(); 
+        // Register the Entry Node object in RMI registry to be accessed by zone nodes 
         registry.bind("GameSetupService", h_stub);
+
+        // Register the Entry Node object in RMI registry to be accessed by players
         registry.bind("GameEntryService", h_stub);
+        
         System.out.println ("Entry Node ready...");
 
         } catch (Exception e) {

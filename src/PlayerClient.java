@@ -1,6 +1,5 @@
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Random;
 import java.util.Scanner;
 
 import interfaces.IEntryNodePlayer;
@@ -32,11 +31,10 @@ public class PlayerClient{
 	System.out.println("Welcome to the game :)");
 	System.out.println();
 
-    Random rand = new Random();
-
+    //register player to game
 	do{
 		System.out.print("Enter Your UserName: ");
-		String userName = sc.nextLine()+"#"+rand.nextInt(1000);
+		String userName = sc.nextLine();
         System.out.print("Enter Your X Coordinate: ");
         int xPos=sc.nextInt();
         System.out.print("Enter Your Y Coordinate: ");
@@ -50,7 +48,7 @@ public class PlayerClient{
 			System.out.println(response.getMessage());
 	}while(!response.isSuccess());
 
-	curZone=response.getZoneDescription().getZoneNode();
+	curZone=response.getZoneNode();
 	System.out.println();
 
 	while(true)
@@ -86,7 +84,7 @@ public class PlayerClient{
             break;
         response= curZone.movePlayer(player, dir);
         if(response.isSuccess())
-            curZone=response.getZoneDescription().getZoneNode();
+            curZone=response.getZoneNode();
         if(response.getMessage()!=null && !response.getMessage().isEmpty())
             player.receiveMessage(response.getMessage());
         //System.out.println(response.getMessage());
@@ -98,6 +96,7 @@ public class PlayerClient{
 	System.exit(0);
 	} catch (Exception e)  {
 		System.err.println("Error on client: " + e);
+        e.printStackTrace();
 	}
   }
 }
