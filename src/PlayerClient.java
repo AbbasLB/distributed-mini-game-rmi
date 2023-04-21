@@ -1,6 +1,5 @@
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Random;
 import java.util.Scanner;
 
 import interfaces.IEntryNodePlayer;
