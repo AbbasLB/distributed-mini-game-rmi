@@ -120,6 +120,8 @@ public class Player implements IPlayer, Serializable {
                 }
             }
         }
+
+        //redraw UI
         DrawUI();
         
     }

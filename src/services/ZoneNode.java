@@ -107,6 +107,7 @@ public class ZoneNode implements IZoneNode,Serializable {
             }
         }
     }
+    //broadcast a player coordinates to all other players in the zone
     private void broadcastPlayerCoords(String playerId,Coordinates playerCoordinates)
     {
         HashMap<String,Coordinates>  newPlayerMap = new HashMap<String,Coordinates>();
@@ -119,6 +120,8 @@ public class ZoneNode implements IZoneNode,Serializable {
             }
         }
     }
+
+    //send the coordinates of all the players in the zone to a single player
     private void sendAllPlayersCoords(IPlayer player) throws RemoteException
     {
         player.receiveUpdate(new HashMap<String,Coordinates>(playersToCoordinates),true, getPlayerZoneDesc());
@@ -130,7 +133,7 @@ public class ZoneNode implements IZoneNode,Serializable {
         synchronized(playersLock)
         {
             if(!zoneReady)
-            return new ZoneResponse("Zone not ready yet", false, zoneDescription.getZoneNode());
+                return new ZoneResponse("Zone not ready yet", false, zoneDescription.getZoneNode());
 
             String playerId = player.getId();
             try {
@@ -141,7 +144,9 @@ public class ZoneNode implements IZoneNode,Serializable {
             
             if(playersToCoordinates.containsKey(playerId))
                 return new ZoneResponse("Player already registered with that username.", false, zoneDescription.getZoneNode());
+
             SimpleEntry<IPlayer,String> playerInDest= coordinatesToPlayer.putIfAbsent(playerCoordinates,new SimpleEntry<IPlayer,String>(player,playerId));
+            //if No other player in the taeget cell destination
             if(playerInDest==null){
                 playersToCoordinates.putIfAbsent(playerId, playerCoordinates);
                 
@@ -152,12 +157,13 @@ public class ZoneNode implements IZoneNode,Serializable {
                 //TODO: check hello order
                 return new ZoneResponse("Player registered to zone at position ("+playerCoordinates.getX()+","+playerCoordinates.getY()+")", true, zoneDescription.getZoneNode());
             }
+            // cell occupied by another plyaer
             try {
-                //test if player in the destination  crashed
+                //test if player in the destination crashed
                 playerInDest.getKey().getId();
             } catch (RemoteException e) {
                 unRegisterPlayerInternal(playerInDest.getValue());
-                //retry registering player again
+                //try registering player again
                 return registerPlayer(player,playerCoordinates);
             }
 
@@ -165,6 +171,7 @@ public class ZoneNode implements IZoneNode,Serializable {
         }
     }
 
+    //unregister player from the zone and broadcast his unregisteration to all other players
     private void unRegisterPlayerInternal(String playerId)
     {
         synchronized(playersLock)
@@ -183,6 +190,7 @@ public class ZoneNode implements IZoneNode,Serializable {
         unRegisterPlayerInternal(playerId);
     }
 
+    //get the destination coordinates based on the direction
     private Coordinates destCoords(Coordinates coordinates,Direction direction)
     {
         int x = coordinates.getX();
@@ -198,6 +206,7 @@ public class ZoneNode implements IZoneNode,Serializable {
         return coordinates;
     }
 
+    //get the zone of a specific coordinates
     private IZoneNode getZoneByCoords(Coordinates coordinates)
     {
         int x = coordinates.getX();

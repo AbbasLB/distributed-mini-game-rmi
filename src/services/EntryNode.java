@@ -23,6 +23,8 @@ public class EntryNode implements IEntryNode,Serializable {
         zonesReady=false;
         initZonesMatrix();
     }
+
+    //init the base and bound of all nodes
     private void initZonesMatrix()
     {
         if(splitSize>matrixSize)
@@ -46,6 +48,7 @@ public class EntryNode implements IEntryNode,Serializable {
     
     public void LinkNeighbors()
     {
+        //send the neighboring zone nodes to each zone node
         for(int i=0;i<splitSize;i++){
             for(int j=0;j<splitSize;j++){
                 IZoneNode zone=zones[i][j].getZoneNode();
@@ -73,6 +76,7 @@ public class EntryNode implements IEntryNode,Serializable {
             }
         }
 
+        //after informing all nodes about their neighbors, mark them as ready
         for(int i=0;i<splitSize;i++)
             for(int j=0;j<splitSize;j++){
                 try{
@@ -85,6 +89,7 @@ public class EntryNode implements IEntryNode,Serializable {
                     System.exit(1);
                 }
             }
+        //start accepting players
         zonesReady=true;
     }
     @Override
@@ -134,6 +139,7 @@ public class EntryNode implements IEntryNode,Serializable {
         if(zoneDesc==null)
             return new ZoneResponse("Coordinates out of bounds.",false, null);
         
+        //assign a unique id for each new player 
         player.setId(player.getId()+"#"+internalPlayerID);
         synchronized(internalPlayerIDLock)
         {
