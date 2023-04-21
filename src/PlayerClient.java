@@ -31,7 +31,7 @@ public class PlayerClient{
 	System.out.println("Welcome to the game :)");
 	System.out.println();
 
-
+    //register player to game
 	do{
 		System.out.print("Enter Your UserName: ");
 		String userName = sc.nextLine();
@@ -96,6 +96,7 @@ public class PlayerClient{
 	System.exit(0);
 	} catch (Exception e)  {
 		System.err.println("Error on client: " + e);
+        e.printStackTrace();
 	}
   }
 }
