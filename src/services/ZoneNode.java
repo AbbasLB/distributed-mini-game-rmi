@@ -102,7 +102,7 @@ public class ZoneNode implements IZoneNode,Serializable {
         newPlayerMap.put(playerId, playerCoordinates);
         for (ConcurrentHashMap.Entry<Coordinates, SimpleEntry<IPlayer,String>> player : coordinatesToPlayer.entrySet()) {
             try {
-                player.getValue().getKey().updateMap(newPlayerMap, false, getPlayerZoneDesc());
+                player.getValue().getKey().receiveUpdate(newPlayerMap, false, getPlayerZoneDesc());
             } catch (RemoteException e) {
                 unRegisterPlayerInternal(player.getValue().getValue());
             }
@@ -110,11 +110,10 @@ public class ZoneNode implements IZoneNode,Serializable {
     }
     private void sendAllPlayersCoords(IPlayer player) throws RemoteException
     {
-        player.updateMap(new HashMap<String,Coordinates>(playersToCoordinates),true, getPlayerZoneDesc());
+        player.receiveUpdate(new HashMap<String,Coordinates>(playersToCoordinates),true, getPlayerZoneDesc());
     }
 
     //TODO: Handle Failures
-    //TODO: Add synchronization
     @Override
     public ZoneResponse registerPlayer(IPlayer player, Coordinates playerCoordinates) throws RemoteException {
         synchronized(playersLock)
@@ -198,7 +197,6 @@ public class ZoneNode implements IZoneNode,Serializable {
         return this;
     }
 
-    //TODO: Add synchronization
     @Override
     public ZoneResponse movePlayer(IPlayer player, Direction direction) throws RemoteException {
 
