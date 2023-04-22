@@ -1,41 +1,49 @@
-# IDS_Game_Project
+# Game Project
 
+## Presentation Slides
+https://docs.google.com/presentation/d/1Q7BBSKuJeJMZEBPUjwyebySSNRu1Doms5BoOL3TGIcY/edit?usp=sharing
 
-## we have 2 types of nodos:
-- Entry Node 
-- Zone Node
+## Requirements:
+- JavaJDK
+- Java Runtime
+- Ant (for building the project)
+- Terminal supporting ANSI escape codes
 
-## Initialization:
+## How to run:
 
-- we create entry node with size of matrix mxm and number of nodes nxn
-- create nxn zone nodes
-1. Identification Phase: Each zone node talks to the entry node to get its associated zone and waits..
-2. Linking Phase: Once all the zones are assigned, the entry node link each zone node to neighbors 
-3. Starting Phase: Once all nodes are linked together, the entry will start accepting new players and it will 
-    assign them to the corresponding zone node
-
-
-IEntryNodePlayer:
-- (IZoneNodePlayer,String Message,bool success) registerPlayer(IPlayer player,PlayerCoordinates coords)
-
-IEntryNode exteds IEntryNodePlayer: 
-- (XBase,YBase,XBound,YBound,matrixSize) registerZone(IZoneNode zoneNode)
-
-IZoneNode:
-    void linkNeighbors(ZoneNeighbors neighbors); ZoneNeigbors <=> class (leftNeighbor,rightNeighbor,topNeighbor,bottomNeigbor);
-    void MarkAsReady();
-
-IZoneNodePlayer:
-    (IZoneNodePlayer,String Message,bool success) registerPlayer(IPlayer player,Coordinates playerCoordinates) ;
-    void unRegisterPlayer(String playerId);
-    (IZoneNodePlayer,String Message,bool success) movePlayer(IPlayer player,Direction direction) ;
-
-IPlayer:
-- string getId()
-- void setId(string id)
-- void receiveUpdate(List<(strinng playerId,int x,int y)> players,bool zoneChanged)
-- void receiveMessage(String message)
-
-
-- handled player disconnection
-- handled player crashing
+If “gnome-terminal” is installed, run the following script, it will compile the code, run all nodes, and start 
+3 player clients:
+```
+./run_game.sh matrixSize splitSize
+```
+For Example, the following command will create a 20x20 map managed by 4 nodes (2x2 nodes):
+ex:
+``` 
+./run_game.sh 20 2
+```
+If “gnome-terminal” not is installed, compile the code and create the jar files by running the ant 
+command:
+```
+ant
+```
+Run the rmiregistry using the provided script:
+```
+./start-rmi.sh
+```
+Run the Entry Node with the preferred parameters:
+```
+java -jar dist/EntryNodeServer.jar matrixSize splitSize
+```
+For Example, the following command will create an entry node that handles 20x20 map managed by 4 
+nodes (2x2 nodes):
+```
+java -jar dist/EntryNodeServer.jar 20 2
+```
+Start Zone nodes depending on the splitSize set, you need splitSize*splitSize nodes:
+```
+java -jar dist/ZoneNodeServer.jar localhost
+```
+Run a player client:
+```
+java -jar dist/PlayerClient.jar localhost
+```
